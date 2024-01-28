@@ -23,3 +23,41 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+body {
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  text-align: center;
+}
+
+#datetime-picker {
+  padding: 8px;
+}
+
+button {
+  padding: 8px 16px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.timer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.field {
+  margin: 0 10px;
+}
+
+.value {
+  font-size: 24px;
+  font-weight: bold;
+}
