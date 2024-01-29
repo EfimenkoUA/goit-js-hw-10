@@ -3,6 +3,9 @@ import "flatpickr/dist/flatpickr.min.css";
 import iziToast from "izitoast/dist/js/iziToast.min.js";
 import "izitoast/dist/css/iziToast.min.css";
 
+const button = document.querySelector('button');
+const dataStart = document.querySelector('[data-start]');
+const dataInput = document.querySelector('[data-input]');
 const options = {
     enableTime: true,
     time_24hr: true,
@@ -12,13 +15,13 @@ const options = {
         const selectedDate = selectedDates[0];
 
         if (selectedDate < new Date()) {
-            document.querySelector('button').disabled = true;
+            button.disabled = true;
             iziToast.error({
                 title: 'Error',
                 message: 'Please choose a date in the future',
             });
         } else {
-            document.querySelector('button').disabled = false;
+            button.disabled = false;
         }
     },
 };
@@ -27,21 +30,13 @@ flatpickr("#datetime-picker", options);
 
 let countdownInterval;
 
-document.querySelector('[data-start]').addEventListener('click', startCountdown);
+dataStart.addEventListener('click', startCountdown);
 
 function startCountdown() {
     const selectedDate = flatpickr.parseDate(document.querySelector('#datetime-picker').value);
-    const currentDate = new Date();
 
-    if (selectedDate < currentDate) {
-        iziToast.error({
-            title: 'Error',
-            message: 'Please choose a date in the future',
-        });
-        return;
-    }
-
-    document.querySelector('[data-start]').disabled = true;
+    dataStart.disabled = true;
+    dataInput.disabled = true;
 
     countdownInterval = setInterval(updateCountdown, 1000, selectedDate);
 }
