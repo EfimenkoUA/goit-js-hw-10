@@ -1,12 +1,11 @@
-import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
-import iziToast from "izitoast/dist/js/iziToast.min.js";
-import "izitoast/dist/css/iziToast.min.css";
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import iziToast from 'izitoast/dist/js/iziToast.min.js';
+import 'izitoast/dist/css/iziToast.min.css';
 
 const button = document.querySelector('button');
-const dataStart = document.querySelector('[data-start]');
 const dataInput = document.querySelector('[data-input]');
-const options = {
+flatpickr('#datetime-picker', {
     enableTime: true,
     time_24hr: true,
     defaultDate: new Date(),
@@ -14,7 +13,7 @@ const options = {
     onClose(selectedDates) {
         const selectedDate = selectedDates[0];
 
-        if (selectedDate < new Date()) {
+        if (selectedDate <= new Date()) {
             button.disabled = true;
             iziToast.error({
                 title: 'Error',
@@ -22,32 +21,30 @@ const options = {
             });
         } else {
             button.disabled = false;
+            button.addEventListener('click', () => startCountdown(selectedDate));
         }
     },
-};
-
-flatpickr("#datetime-picker", options);
+});
 
 let countdownInterval;
+let selectedDate;
 
-dataStart.addEventListener('click', startCountdown);
-
-function startCountdown() {
-    const selectedDate = flatpickr.parseDate(document.querySelector('#datetime-picker').value);
-
-    dataStart.disabled = true;
+function startCountdown(targetDate) {
     dataInput.disabled = true;
+    button.disabled = true;
+    selectedDate = targetDate;
 
-    countdownInterval = setInterval(updateCountdown, 1000, selectedDate);
+    countdownInterval = setInterval(() => updateCountdown(), 1000);
 }
 
-function updateCountdown(targetDate) {
+function updateCountdown() {
     const currentDate = new Date();
-    const timeDifference = targetDate - currentDate;
+    const timeDifference = selectedDate - currentDate;
 
     if (timeDifference <= 0) {
         clearInterval(countdownInterval);
         displayTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        button.disabled = false;
     } else {
         const timeLeft = convertMs(timeDifference);
         displayTime(timeLeft);
